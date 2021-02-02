@@ -19,6 +19,7 @@ class CreateContatosTable extends Migration
             $table->string('endereco');
             $table->bigInteger('numero');
             $table->date('nascimento');
+            $table->string('foto')->nullable();
             $table->timestamps();
         });
     }

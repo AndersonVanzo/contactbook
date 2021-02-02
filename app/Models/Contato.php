@@ -14,5 +14,6 @@ class Contato extends Model
         'endereco',
         'numero',
         'nascimento',
+        'foto'
     ];
 }

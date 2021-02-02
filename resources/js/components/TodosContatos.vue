@@ -14,9 +14,10 @@
                     <div class="col-12 col-md-8">
                         <div class="row contato">
                             <div class="col-2 contato-img">
-                                <img src="" class="img-fluid img-thumbnail rounded-circle" alt="">
-                                <!-- :src="require('../assets/default-user.png')" -->
+                                <img :src="'./storage/'+contato.foto" class="img-fluid img-thumbnail rounded-circle foto" alt="Foto do Contato">
+                                <!--  -->
                             </div>
+
                             <div class="col-8 contato-dados">
                                 <p>
                                     <span>{{ contato.nome }}</span><br>

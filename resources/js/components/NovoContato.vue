@@ -6,10 +6,10 @@
             </div>
 
             <div class="container-fluid text-left">
-                <form @submit.prevent="addContato">
+                <form @submit.prevent="addContato" enctype="multipart/form-data">
 
                     <div class="form-group">
-                        <input class="form-control-file" type="file">
+                        <input class="form-control-file" type="file" @change="imageChange">
                     </div>
 
                     <div class="form-group">
@@ -51,11 +51,16 @@ export default {
     name: 'NovoComponent',
     data(){
         return {
+            image: '',
             contato: {}
         }
     },
     methods: {
+        imageChange(e) {
+            this.image = e.target.files[0];
+        },
         addContato() {
+            this.contato.foto = this.image;
             this.axios
                 .post('http://localhost:8000/api/contatos', this.contato)
                 .then(response => (
