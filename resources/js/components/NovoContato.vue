@@ -61,7 +61,6 @@ export default {
         },
         addContato() {
             this.contato.foto = this.image;
-            console.log(this.contato);
             this.axios
                 .post('http://localhost:8000/api/contatos', this.contato)
                 .then(response => (

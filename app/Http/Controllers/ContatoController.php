@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\File;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Contato;
 use Illuminate\Cache\Repository;
+use Illuminate\Foundation\Console\StorageLinkCommand;
 use SebastianBergmann\Environment\Console;
 use Symfony\Component\Console\Input\Input;
 
@@ -18,35 +21,31 @@ class ContatoController extends Controller
 
     public function store(Request $request)
     {
-
-        $request->validate([
-            'foto' => 'required|mimes:jpg,jpeg,png,csv,txt,xlx,xls,pdf|max:2048'
-        ]);
-
-        $contato = new Contato;
-        $nome = $request->input('nome');
-        $endereco = $request->input('endereco');
-        $nascimento = $request->input('nascimento');
-
-        if($request->file()) {
-            $file_name = time().'_'.$request->file->getClientOriginalName();
-            $file_path = $request->file('foto')->storeAs('uploads', $file_name, 'public');
-            $contato->nome = $nome;
-            $contato->endereco = $endereco;
-            $contato->nascimento = $nascimento;
-            $contato->foto = `/storage/`.$file_path;
-
-            $contato->save();
+        
+        if($request->hasFile('foto')) {
+            storeFile($request->file('foto'), $request->input('nome'), $request->file('foto')->extension());
+            $foto = $request->input('name').$request->file('foto')->extension();
         } else {
-            $contato->nome = $nome;
-            $contato->endereco = $endereco;
-            $contato->nascimento = $nascimento;
-            $contato->foto = '/storage/default-user.png';
-
-            $contato->save();
+            $foto = '/storage/default-user.png';
         }
 
+        $contato = new Contato([
+            'nome' => $request->input('nome'),
+            'endereco' => $request->input('endereco'),
+            'numero' => $request->input('numero'),
+            'nascimento' => $request->input('nascimento'),
+            'foto' => $foto,
+        ]);
+
+        $contato->save();
+
         return response()->json('Contato salvo!');
+    }
+
+    protected function storeFile($file, $nome, $extensao) {
+        $newname = $nome . $extensao;
+        Storage::put($newname, $file);
+        return;
     }
 
     public function show($id)
