@@ -14,20 +14,12 @@
                     <div class="col-12 col-md-8">
                         <div class="row contato">
                             <div class="col-2 contato-img">
-                                <img src="" class="img-fluid img-thumbnail rounded-circle foto" alt="Foto do Contato">
-                                <!-- :src="require('../assets/default-user.png')" -->
+                                <img :src="'./storage/'+contato.foto" class="img-fluid img-thumbnail rounded-circle foto" alt="Foto do Contato">
+                                <!--  -->
                             </div>
-
-                            <script type="javascript">
-                                var source = document.getElementByClass('foto');
-                                source.src = '../../'+{{contato.foto}};
-                                console.log({{contato.foto}})
-                            </script>
 
                             <div class="col-8 contato-dados">
                                 <p>
-                                    C:\Users\ander\Documents\GitHub\contatosSPA\storage\default-user.png
-                                    <span>{{contato.foto}}</span>
                                     <span>{{ contato.nome }}</span><br>
                                     <span>{{ contato.numero }}</span><br>
                                     <span>{{ contato.endereco }}</span><br>

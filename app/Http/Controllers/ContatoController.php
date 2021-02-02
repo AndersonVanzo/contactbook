@@ -23,10 +23,13 @@ class ContatoController extends Controller
     {
         
         if($request->hasFile('foto')) {
-            storeFile($request->file('foto'), $request->input('nome'), $request->file('foto')->extension());
-            $foto = $request->input('name').$request->file('foto')->extension();
+            $nome = $request->input('nome');
+            $extensao = $request->file('foto')->extension();
+            $foto = $nome . $extensao;
+
+            Storage::putFileAs('', $request->file('foto'), $foto);
         } else {
-            $foto = '/storage/default-user.png';
+            $foto = 'default-user.png';
         }
 
         $contato = new Contato([
@@ -40,12 +43,6 @@ class ContatoController extends Controller
         $contato->save();
 
         return response()->json('Contato salvo!');
-    }
-
-    protected function storeFile($file, $nome, $extensao) {
-        $newname = $nome . $extensao;
-        Storage::put($newname, $file);
-        return;
     }
 
     public function show($id)
