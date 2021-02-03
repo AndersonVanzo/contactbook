@@ -61,8 +61,19 @@ export default {
         },
         addContato() {
             this.contato.foto = this.image;
+            let form = new FormData();
+            const config = {
+                headers: {
+                'content-type': 'multipart/form-data',
+                }
+            }
+            form.append('nome', this.contato.nome);
+            form.append('numero', this.contato.numero);
+            form.append('endereco', this.contato.endereco);
+            form.append('nascimento', this.contato.nascimento);
+            form.append('foto', this.image);
             this.axios
-                .post('http://localhost:8000/api/contatos', this.contato)
+                .post('http://localhost:8000/api/contatos', form, config)
                 .then(response => (
                     this.$router.push({ name: 'home' })
                 ))

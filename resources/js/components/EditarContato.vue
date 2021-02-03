@@ -6,10 +6,10 @@
             </div>
 
             <div class="container-fluid text-left">
-                <form @submit.prevent="updateContato">
+                <form @submit.prevent="updateContato" enctype="multipart/form-data">
 
                     <div class="form-group">
-                        <input class="form-control-file" type="file" name="foto" id="foto-input">
+                        <input class="form-control-file" type="file" @change="imageChange">
                     </div>
 
                     <div class="form-group">
@@ -50,6 +50,7 @@ export default {
     name: 'NovoComponent',
     data(){
         return {
+            image: '',
             contato: {}
         }
     },
@@ -61,10 +62,25 @@ export default {
             });
     },
     methods: {
+        imageChange(e) {
+            this.image = e.target.files[0];
+        },
         updateContato() {
+            this.contato.foto = this.image;
+            let form = new FormData();
+            const config = {
+                headers: {
+                'content-type': 'multipart/form-data',
+                }
+            }
+            form.append('nome', this.contato.nome);
+            form.append('numero', this.contato.numero);
+            form.append('endereco', this.contato.endereco);
+            form.append('nascimento', this.contato.nascimento);
+            form.append('foto', this.image);
             this.axios
-                .patch(`http://localhost:8000/api/contatos/${this.$route.params.id}`, this.contato)
-                .then((res) => {
+                .patch(`http://localhost:8000/api/contatos/${this.$route.params.id}`, form, config)
+                .then((response) => {
                     this.$router.push({ name: 'home' });
                 });
         },
