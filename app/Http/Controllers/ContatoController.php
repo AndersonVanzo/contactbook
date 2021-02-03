@@ -10,6 +10,7 @@ use Illuminate\Cache\Repository;
 use Illuminate\Foundation\Console\StorageLinkCommand;
 use SebastianBergmann\Environment\Console;
 use Symfony\Component\Console\Input\Input;
+use Illuminate\Support\Facades\Log;
 
 class ContatoController extends Controller
 {
@@ -25,9 +26,9 @@ class ContatoController extends Controller
         if($request->hasFile('foto')) {
             $nome = $request->input('nome');
             $extensao = $request->file('foto')->extension();
-            $foto = $nome . $extensao;
+            $foto = $nome .'.'. $extensao;
 
-            Storage::putFileAs('', $request->file('foto'), $foto);
+            Storage::putFileAs('public', $request->file('foto'), $foto);
         } else {
             $foto = 'default-user.png';
         }
@@ -53,8 +54,25 @@ class ContatoController extends Controller
 
     public function update($id, Request $request)
     {
+
+        if($request->hasFile('foto')) {
+            $nome = $request->input('nome');
+            $extensao = $request->file('foto')->extension();
+            $foto = $nome .'.'. $extensao;
+
+            Storage::putFileAs('public', $request->file('foto'), $foto);
+        } else {
+            $foto = 'default-user.png';
+        }
+
         $contato = Contato::find($id);
-        $contato->update($request->all());
+        $contato->update([
+            'nome' => $request->input('nome'),
+            'endereco' => $request->input('endereco'),
+            'numero' => $request->input('numero'),
+            'nascimento' => $request->input('nascimento'),
+            'foto' => $foto,
+        ]);
 
         return response()->json('Contato atualizado!');
     }

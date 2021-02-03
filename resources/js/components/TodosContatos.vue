@@ -15,7 +15,6 @@
                         <div class="row contato">
                             <div class="col-2 contato-img">
                                 <img :src="'./storage/'+contato.foto" class="img-fluid img-thumbnail rounded-circle foto" alt="Foto do Contato">
-                                <!--  -->
                             </div>
 
                             <div class="col-8 contato-dados">
@@ -121,6 +120,25 @@ export default {
     .contato-dados, .contato-acao {
         text-align: left;
         font-weight: 600;
+    }
+
+    .contato-img {
+        position: relative;
+        width: 100%;
+    }
+
+    .contato-img::after {
+        content: '';
+        display: block;
+        padding-bottom: 100%;
+    }
+
+    .contato-img img {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 
     .icon {
